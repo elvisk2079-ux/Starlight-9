@@ -1,0 +1,1657 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Invisibility Cloak · Starlight 9</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column — mastery board of the 20 phrases, then five drills in a fixed ladder */
+:root {
+  --paper: #F8F1E6; --card: #FFFCF6; --ink: #1F2C4C; --muted: #6B6F7D; --line: #E7DCCA;
+  --accent: #3A5486; --accent-soft: #E7ECF5; --on-accent: #FFFFFF;
+  --ok: #4C8560; --ok-soft: #E1EEE3; --bad: #B5544B; --bad-soft: #F6E2DD;
+  --mark: #F6D9A6; --mark-ink: #5A3B0B; --dot: #E2D6C2; --rose: #F1D6CF; --amber: #C98A3A;
+  --font-display: "Young Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #151A25; --card: #1E2432; --ink: #EEE7DB; --muted: #A4A8B4; --line: #313848;
+    --accent: #9FB5E2; --accent-soft: #263049; --on-accent: #111A30;
+    --ok: #8FCAA0; --ok-soft: #1C3226; --bad: #F09B90; --bad-soft: #3C2422;
+    --mark: #5C4720; --mark-ink: #FBE7C2; --dot: #3A4152; --rose: #3A2A30; --amber: #E0A85A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #151A25; --card: #1E2432; --ink: #EEE7DB; --muted: #A4A8B4; --line: #313848;
+    --accent: #9FB5E2; --accent-soft: #263049; --on-accent: #111A30;
+    --ok: #8FCAA0; --ok-soft: #1C3226; --bad: #F09B90; --bad-soft: #3C2422;
+    --mark: #5C4720; --mark-ink: #FBE7C2; --dot: #3A4152; --rose: #3A2A30; --amber: #E0A85A; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+.hero { padding-block: 40px 16px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(32px, 6vw, 46px); line-height: 1.1; margin: 0 0 12px; text-wrap: balance; }
+.sub { margin: 0; color: var(--muted); max-width: 60ch; }
+
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; flex-direction: column; gap: 8px; padding-block: 10px; }
+.nav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.nav::-webkit-scrollbar { display: none; }
+.nav a { flex: none; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); }
+.nav a:hover { border-color: var(--accent); color: var(--accent); }
+.progress { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+.track { flex: 1; height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.fill { height: 100%; width: 0; background: var(--ok); transition: width .4s ease; }
+.progress b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+main { padding-block: 8px 64px; }
+section { padding-top: 26px; scroll-margin-top: 110px; }
+h2 { font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.2; margin: 0 0 4px; }
+.lead { margin: 0 0 14px; color: var(--muted); }
+
+/* Mastery board */
+.board { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; }
+.chip { min-width: 0; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; display: flex; flex-direction: column; gap: 4px; }
+.chip .ph { font-weight: 600; font-size: 15px; line-height: 1.3; }
+.chip .ru { font-size: 12.5px; color: var(--muted); line-height: 1.3; }
+.dots { display: flex; gap: 3px; }
+.dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--dot); }
+.dots i.on { background: var(--ok); }
+.chip.weak { border-color: var(--bad); }
+.chip.master { border-color: var(--ok); background: var(--ok-soft); }
+.board-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; font-size: 13px; color: var(--muted); }
+
+/* Exercise card */
+.ex { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 18px 16px; }
+.ex-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+h3 { margin: 0; font-size: 18px; font-weight: 700; }
+h3 .num { font-family: var(--font-mono); font-size: 13px; color: var(--accent); margin-right: 8px; }
+.score { flex: none; font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); }
+.score.done { color: var(--ok); border-color: var(--ok); background: var(--ok-soft); }
+.instr { margin: 6px 0 14px; color: var(--muted); font-size: 15px; }
+ol.items { margin: 0; padding-left: 1.6em; display: flex; flex-direction: column; gap: 10px; }
+ol.items li { line-height: 2; padding-left: 4px; }
+ol.items li::marker { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+
+.choice { display: inline-flex; flex-wrap: wrap; gap: 4px; vertical-align: baseline; }
+.opt { font: inherit; font-size: 16px; line-height: 1.4; color: var(--ink); cursor: pointer; background: var(--card); border: 1.5px solid var(--line); border-radius: 999px; padding: 1px 11px; text-align: left; }
+.opt:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.opt.ok { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); font-weight: 600; cursor: default; }
+.opt.bad { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); text-decoration: line-through; cursor: default; }
+.opt.dim { opacity: .4; cursor: default; }
+.shake { animation: shake .3s; }
+@keyframes shake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+
+/* MCQ */
+.q { margin: 0 0 6px; line-height: 1.5; }
+.mcq { display: flex; flex-wrap: wrap; gap: 6px; }
+.mcq .opt { border-radius: 8px; padding: 4px 12px; }
+
+/* Right or wrong */
+.tf-line { line-height: 1.5; margin: 0 0 6px; }
+.tf-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.fix { margin: 6px 0 0; font-size: 15px; line-height: 1.5; }
+.fix.ok { color: var(--ok); }
+.fix.bad { color: var(--bad); }
+.fix b { color: var(--ink); }
+
+.gap { font: inherit; font-size: 16px; color: var(--ink); background: var(--accent-soft); border: none; border-bottom: 2px dashed var(--accent); border-radius: 4px 4px 0 0; padding: 1px 6px; max-width: 100%; }
+.gap:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.gap.ok { background: var(--ok-soft); border-bottom: 2px solid var(--ok); }
+.gap.bad { background: var(--bad-soft); border-bottom: 2px solid var(--bad); }
+.gap.shown { background: var(--mark); color: var(--mark-ink); border-bottom: 2px solid var(--mark-ink); }
+
+/* Translate */
+.tr li { line-height: 1.5 !important; }
+.tr .ru-line { margin: 0 0 6px; font-weight: 500; }
+.tr textarea { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; resize: vertical; min-height: 44px; }
+.tr textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; }
+.tr textarea.ok { border-color: var(--ok); background: var(--ok-soft); }
+.tr textarea.bad { border-color: var(--bad); background: var(--bad-soft); }
+.tr .line { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; align-items: center; }
+.model { margin: 8px 0 2px; font-size: 15px; color: var(--muted); }
+.model b { color: var(--ink); }
+
+.foot { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.btn { font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1.5px solid var(--line); background: var(--card); color: var(--ink); }
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.btn.primary:hover { filter: brightness(1.08); color: var(--on-accent); }
+.btn.small { font-size: 13px; padding: 4px 10px; }
+.btn:focus-visible, .opt:focus-visible, .nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.note { margin: 14px 0 0; padding: 10px 12px; border-radius: 8px; font-size: 15px; background: var(--accent-soft); }
+
+@media (max-width: 480px) { body { font-size: 16px; } .ex { padding: 14px; } ol.items { padding-left: 1.3em; } }
+@media (prefers-reduced-motion: reduce) { .shake { animation: none; } .fill { transition: none; } html { scroll-behavior: auto; } }
+
+/* Word order */
+.uns { display: flex; flex-direction: column; gap: 6px; }
+.answer-line { min-height: 42px; display: flex; flex-wrap: wrap; gap: 6px; padding: 6px; border: 1.5px dashed var(--line); border-radius: 8px; background: var(--paper); }
+.answer-line.ok { border: 1.5px solid var(--ok); background: var(--ok-soft); }
+.answer-line.bad { border: 1.5px solid var(--bad); background: var(--bad-soft); }
+.tiles { display: flex; flex-wrap: wrap; gap: 6px; }
+.tile { font: inherit; font-size: 16px; padding: 3px 10px; border-radius: 6px; border: 1.5px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer; }
+.tile:hover { border-color: var(--accent); color: var(--accent); }
+.tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.uns .line { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.uns .fix { margin: 0; }
+
+.cue { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .06em; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin: 0 3px; white-space: nowrap; }
+.bank { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; padding: 10px; border: 1px dashed var(--line); border-radius: 8px; }
+.bank span { font-size: 14px; padding: 2px 9px; border-radius: 6px; background: var(--accent-soft); }
+p.text { margin: 0 0 10px; line-height: 2.2; }
+
+/* flashcards */
+.fc-tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+.btn.ghost { background: transparent; border: 1px solid var(--line); color: inherit; }
+.flip { perspective: 1200px; cursor: pointer; outline: none; margin: 0 auto; max-width: 560px; }
+.flip-in { position: relative; min-height: 220px; transition: transform .45s; transform-style: preserve-3d; }
+.flip.on .flip-in { transform: rotateY(180deg); }
+.flip:focus-visible .flip-in { box-shadow: 0 0 0 3px var(--accent-soft); border-radius: 14px; }
+.face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 22px 18px 30px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: var(--ink); text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.face.back { transform: rotateY(180deg); background: var(--accent-soft); }
+.fc-word { font-size: clamp(22px, 5vw, 30px); font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
+.fc-ru { font-size: clamp(19px, 4.4vw, 25px); font-weight: 600; line-height: 1.3; }
+.fc-def { font-size: 14px; opacity: .75; max-width: 42ch; }
+.fc-hint { position: absolute; bottom: 8px; font-size: 12px; opacity: .45; }
+.speak { font-size: 22px; line-height: 1; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer; }
+.fc-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 12px 0 6px; }
+.fc-nav .btn { font-size: 20px; padding: 4px 16px; }
+.fc-count { font-variant-numeric: tabular-nums; min-width: 5ch; text-align: center; }
+.fc-rate { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+.btn.again { background: transparent; border: 1px solid var(--amber); color: var(--amber); }
+.btn.know { background: var(--ok); border: 1px solid var(--ok); color: #fff; }
+.fc-done { text-align: center; }
+.fc-done p { font-weight: 600; margin: 8px 0 10px; }
+.btn.know:hover { color: #fff; filter: brightness(1.08); border-color: var(--ok); }
+.btn.again:hover { color: var(--amber); border-color: var(--amber); background: var(--mark); }
+
+.brush { background: linear-gradient(transparent 58%, var(--rose) 58%, var(--rose) 92%, transparent 92%); padding: 0 4px; }
+.eyebrow { color: var(--ok); }
+h3 .num { color: var(--ok); }
+.hero { position: relative; }
+.hero::after { content: "★"; position: absolute; right: 16px; top: 34px; font-size: 40px; color: var(--amber); opacity: .7; }
+
+.fc-ipa { font-family: "Lucida Sans Unicode", "Arial Unicode MS", "Segoe UI", system-ui, sans-serif; color: var(--muted); font-size: 18px; margin-top: 4px; }
+.ipa-s { font-family: "Lucida Sans Unicode", "Arial Unicode MS", "Segoe UI", system-ui, sans-serif; color: var(--muted); font-size: 15px; font-weight: 400; }
+.speak.inl { font-size: 16px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); cursor: pointer; vertical-align: middle; }
+.ru-hint { color: var(--muted); font-size: 14px; line-height: 1.4; margin-top: 2px; }
+.brand { text-align: center; font-size: 13px; color: var(--muted); padding-block: 0 40px; }
+</style>
+
+<header class="hero wrap">
+  <p class="eyebrow">Starlight 9 · p. 30B</p>
+  <h1><span class="brush">Invisibility Cloak</span></h1>
+  <p class="sub">Слова из текста B — плащ-невидимка. Сначала карточки, потом пять упражнений.</p>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <nav class="nav" id="nav" aria-label="Drills"></nav>
+    <div class="progress" aria-live="polite">
+      <div class="track"><div class="fill" id="fill"></div></div>
+      <span><b id="mastered">0</b> / <b id="ptotal">0</b> выучено</span>
+    </div>
+  </div>
+</div>
+
+<main class="wrap" id="main">
+  <section id="board-sec">
+    <h2>Твои слова</h2>
+    <p class="lead">За каждый правильный ответ — точка. Все точки зелёные = слово выучено. Красная рамка = повтори это слово.</p>
+    <div class="board" id="board"></div>
+    <div class="board-foot">
+      <span>Прогресс сохраняется в этом браузере.</span>
+      <button class="btn small" type="button" id="reset-all">Сбросить прогресс</button>
+    </div>
+  </section>
+</main>
+<footer class="wrap brand"><a href="../" style="color:inherit">← все уроки</a><br>© Чемоданчик учителя английского</footer>
+
+<script>
+// TITLE: Invisibility Cloak
+const META = {"ls": "anya-s9-30b"};
+const P = [
+{
+"id": "invisibility-cloak",
+"phrase": "invisibility cloak",
+"ru": "плащ-невидимка",
+"ipa": "/ˌɪnvɪzəˈbɪləti kləʊk/",
+"s": "Harry Potter has an ___.",
+"t": "У Гарри Поттера есть плащ-невидимка."
+},
+{
+"id": "invisible",
+"phrase": "invisible",
+"ru": "невидимый",
+"ipa": "/ɪnˈvɪzəbl/",
+"s": "Air is ___.",
+"t": "Воздух невидимый."
+},
+{
+"id": "cloak",
+"phrase": "cloak",
+"ru": "плащ, накидка",
+"ipa": "/kləʊk/",
+"s": "The wizard wears a long black ___.",
+"t": "Волшебник носит длинный чёрный плащ."
+},
+{
+"id": "prove",
+"phrase": "prove",
+"ru": "доказывать; оказаться (каким-то)",
+"ipa": "/pruːv/",
+"s": "Can you ___ it?",
+"t": "Ты можешь это доказать?"
+},
+{
+"id": "useful",
+"phrase": "useful",
+"ru": "полезный",
+"ipa": "/ˈjuːsfl/",
+"s": "A dictionary is very ___.",
+"t": "Словарь очень полезен."
+},
+{
+"id": "adventure",
+"phrase": "adventure",
+"ru": "приключение",
+"ipa": "/ədˈventʃə/",
+"s": "We had a great ___ in the forest.",
+"t": "У нас было классное приключение в лесу."
+},
+{
+"id": "how-far",
+"phrase": "how far",
+"ru": "как далеко",
+"ipa": "/haʊ ˈfɑː/",
+"s": "___ is your school from your house?",
+"t": "Как далеко твоя школа от дома?"
+},
+{
+"id": "develop",
+"phrase": "develop",
+"ru": "развивать, разрабатывать",
+"ipa": "/dɪˈveləp/",
+"s": "Scientists ___ new medicines.",
+"t": "Учёные разрабатывают новые лекарства."
+},
+{
+"id": "outrageous",
+"phrase": "outrageous",
+"ru": "безумный, невероятный; возмутительный",
+"ipa": "/aʊtˈreɪdʒəs/",
+"s": "That's an ___ idea!",
+"t": "Это безумная идея!"
+},
+{
+"id": "idea",
+"phrase": "idea",
+"ru": "идея",
+"ipa": "/aɪˈdɪə/",
+"s": "That's a great ___!",
+"t": "Отличная идея!"
+},
+{
+"id": "real",
+"phrase": "real",
+"ru": "настоящий, реальный",
+"ipa": "/rɪəl/",
+"s": "Is this a ___ diamond?",
+"t": "Это настоящий бриллиант?"
+},
+{
+"id": "prototype",
+"phrase": "prototype",
+"ru": "прототип, опытный образец",
+"ipa": "/ˈprəʊtətaɪp/",
+"s": "They built a ___ of the new car.",
+"t": "Они сделали прототип новой машины."
+},
+{
+"id": "quite",
+"phrase": "quite",
+"ru": "довольно, вполне",
+"ipa": "/kwaɪt/",
+"s": "The film was ___ good.",
+"t": "Фильм был довольно хороший."
+},
+{
+"id": "actually",
+"phrase": "actually",
+"ru": "на самом деле, вообще-то",
+"ipa": "/ˈæktʃuəli/",
+"s": "___, I don't like pizza.",
+"t": "Вообще-то я не люблю пиццу."
+},
+{
+"id": "university",
+"phrase": "university",
+"ru": "университет",
+"ipa": "/ˌjuːnɪˈvɜːsəti/",
+"s": "My brother studies at ___.",
+"t": "Мой брат учится в университете."
+},
+{
+"id": "demonstrate",
+"phrase": "demonstrate",
+"ru": "показывать, демонстрировать",
+"ipa": "/ˈdemənstreɪt/",
+"s": "The teacher will ___ the experiment.",
+"t": "Учитель покажет опыт."
+},
+{
+"id": "switch",
+"phrase": "switch",
+"ru": "выключатель; переключать",
+"ipa": "/swɪtʃ/",
+"s": "Where is the light ___?",
+"t": "Где выключатель?"
+},
+{
+"id": "at-the-flick-of-a-switch",
+"phrase": "at the flick of a switch",
+"ru": "одним щелчком, моментально",
+"ipa": "/ət ðə flɪk əv ə swɪtʃ/",
+"s": "The lights come on ___.",
+"t": "Свет включается одним щелчком."
+},
+{
+"id": "same",
+"phrase": "same",
+"ru": "одинаковый, тот же самый",
+"ipa": "/seɪm/",
+"s": "We are in the ___ class.",
+"t": "Мы в одном классе."
+},
+{
+"id": "principle",
+"phrase": "principle",
+"ru": "принцип",
+"ipa": "/ˈprɪnsəpl/",
+"s": "This machine works on a simple ___.",
+"t": "Эта машина работает по простому принципу."
+},
+{
+"id": "desert",
+"phrase": "desert",
+"ru": "пустыня",
+"ipa": "/ˈdezət/",
+"s": "It is very hot in the ___.",
+"t": "В пустыне очень жарко."
+},
+{
+"id": "mirage",
+"phrase": "mirage",
+"ru": "мираж",
+"ipa": "/ˈmɪrɑːʒ/",
+"s": "The water was only a ___.",
+"t": "Вода оказалась всего лишь миражом."
+},
+{
+"id": "heat",
+"phrase": "heat",
+"ru": "жара, тепло; нагревать",
+"ipa": "/hiːt/",
+"s": "I can't sleep in this ___.",
+"t": "Я не могу спать в такую жару."
+},
+{
+"id": "bend",
+"phrase": "bend",
+"ru": "сгибать, изгибать",
+"ipa": "/bend/",
+"s": "___ your knees and jump!",
+"t": "Согни колени и прыгай!"
+},
+{
+"id": "light",
+"phrase": "light",
+"ru": "свет; лёгкий",
+"ipa": "/laɪt/",
+"s": "Please turn on the ___.",
+"t": "Включи, пожалуйста, свет."
+},
+{
+"id": "shape",
+"phrase": "shape",
+"ru": "форма",
+"ipa": "/ʃeɪp/",
+"s": "A ball has a round ___.",
+"t": "У мяча круглая форма."
+},
+{
+"id": "out-of-shape",
+"phrase": "out of shape",
+"ru": "деформированный; не в форме",
+"ipa": "/aʊt əv ˈʃeɪp/",
+"s": "I don't do sport, so I'm ___.",
+"t": "Я не занимаюсь спортом, поэтому я не в форме."
+},
+{
+"id": "create",
+"phrase": "create",
+"ru": "создавать",
+"ipa": "/kriˈeɪt/",
+"s": "Artists ___ beautiful pictures.",
+"t": "Художники создают красивые картины."
+},
+{
+"id": "illusion",
+"phrase": "illusion",
+"ru": "иллюзия",
+"ipa": "/ɪˈluːʒn/",
+"s": "It's not real, it's an ___.",
+"t": "Это не по-настоящему, это иллюзия."
+},
+{
+"id": "trick",
+"phrase": "trick",
+"ru": "трюк, фокус; обман",
+"ipa": "/trɪk/",
+"s": "Can you show me a card ___?",
+"t": "Покажешь мне карточный фокус?"
+},
+{
+"id": "fool",
+"phrase": "fool",
+"ru": "обманывать, дурачить",
+"ipa": "/fuːl/",
+"s": "Don't try to ___ me!",
+"t": "Не пытайся меня обмануть!"
+},
+{
+"id": "thirsty",
+"phrase": "thirsty",
+"ru": "испытывающий жажду (I'm thirsty — хочу пить)",
+"ipa": "/ˈθɜːsti/",
+"s": "I'm ___. Can I have some water?",
+"t": "Я хочу пить. Можно воды?"
+},
+{
+"id": "traveller",
+"phrase": "traveller",
+"ru": "путешественник",
+"ipa": "/ˈtrævələ/",
+"s": "The ___ walked for many days.",
+"t": "Путешественник шёл много дней."
+},
+{
+"id": "temperature",
+"phrase": "temperature",
+"ru": "температура",
+"ipa": "/ˈtemprətʃə/",
+"s": "What is the ___ today?",
+"t": "Какая сегодня температура?"
+},
+{
+"id": "much",
+"phrase": "much",
+"ru": "гораздо (much higher — гораздо выше)",
+"ipa": "/mʌtʃ/",
+"s": "This book is ___ better than that one.",
+"t": "Эта книга гораздо лучше той."
+},
+{
+"id": "tube",
+"phrase": "tube",
+"ru": "трубка, тюбик; метро в Лондоне",
+"ipa": "/tjuːb/",
+"s": "I go to work by ___ in London.",
+"t": "В Лондоне я езжу на работу на метро."
+},
+{
+"id": "look-like",
+"phrase": "look like",
+"ru": "выглядеть как, быть похожим",
+"ipa": "/lʊk laɪk/",
+"s": "You ___ your mum.",
+"t": "Ты похожа на маму."
+},
+{
+"id": "strand",
+"phrase": "strand",
+"ru": "нить, прядь",
+"ipa": "/strænd/",
+"s": "There is a ___ of hair on your jacket.",
+"t": "У тебя на куртке волосок."
+},
+{
+"id": "thread",
+"phrase": "thread",
+"ru": "нитка",
+"ipa": "/θred/",
+"s": "I need a needle and ___.",
+"t": "Мне нужны иголка и нитка."
+},
+{
+"id": "enough",
+"phrase": "enough",
+"ru": "достаточно",
+"ipa": "/ɪˈnʌf/",
+"s": "I don't have ___ money.",
+"t": "У меня недостаточно денег."
+},
+{
+"id": "hide",
+"phrase": "hide",
+"ru": "прятать(ся)",
+"ipa": "/haɪd/",
+"s": "Where did you ___ the keys?",
+"t": "Куда ты спрятала ключи?"
+},
+{
+"id": "view",
+"phrase": "view",
+"ru": "вид; поле зрения",
+"ipa": "/vjuː/",
+"s": "There is a beautiful ___ from my window.",
+"t": "Из моего окна красивый вид."
+},
+{
+"id": "mean",
+"phrase": "mean",
+"ru": "значить, означать",
+"ipa": "/miːn/",
+"s": "What does this word ___?",
+"t": "Что значит это слово?"
+},
+{
+"id": "fully",
+"phrase": "fully",
+"ru": "полностью",
+"ipa": "/ˈfʊli/",
+"s": "My phone is ___ charged.",
+"t": "Мой телефон полностью заряжен."
+},
+{
+"id": "in-the-near-future",
+"phrase": "in the near future",
+"ru": "в ближайшем будущем",
+"ipa": "/ɪn ðə nɪə ˈfjuːtʃə/",
+"s": "I will buy a new phone ___.",
+"t": "Я куплю новый телефон в ближайшем будущем."
+},
+{
+"id": "perhaps",
+"phrase": "perhaps",
+"ru": "возможно, может быть",
+"ipa": "/pəˈhæps/",
+"s": "___ it will rain tomorrow.",
+"t": "Может быть, завтра будет дождь."
+},
+{
+"id": "problem",
+"phrase": "problem",
+"ru": "проблема",
+"ipa": "/ˈprɒbləm/",
+"s": "What's the ___?",
+"t": "В чём проблема?"
+},
+{
+"id": "so-far",
+"phrase": "so far",
+"ru": "пока что, до сих пор",
+"ipa": "/səʊ ˈfɑː/",
+"s": "___ I have learnt 50 words.",
+"t": "Пока что я выучила 50 слов."
+},
+{
+"id": "only",
+"phrase": "only",
+"ru": "только; единственный",
+"ipa": "/ˈəʊnli/",
+"s": "I have ___ one brother.",
+"t": "У меня только один брат."
+},
+{
+"id": "underwater",
+"phrase": "underwater",
+"ru": "под водой",
+"ipa": "/ˌʌndəˈwɔːtə/",
+"s": "Fish live ___.",
+"t": "Рыбы живут под водой."
+}
+];
+const DRILLS = [
+{
+"type": "pick",
+"mode": "enru",
+"title": "Выбери перевод",
+"short": "Перевод",
+"instr": "Прочитай слово (можно послушать 🔊) и нажми правильный перевод."
+},
+{
+"type": "pick",
+"mode": "ruen",
+"title": "Найди английское слово",
+"short": "Найди слово",
+"instr": "Прочитай перевод и нажми английское слово."
+},
+{
+"type": "pick",
+"mode": "listen",
+"title": "Слушай и выбирай",
+"short": "На слух",
+"instr": "Нажми 🔊, послушай слово и выбери, что ты услышала."
+},
+{
+"type": "gaps",
+"title": "Напиши слово",
+"short": "Напиши",
+"instr": "Напиши английское слово по переводу. Подсказка — первая буква и транскрипция. Потом нажми «Проверить».",
+"items": [
+{
+"id": "invisibility-cloak",
+"t": "плащ-невидимка — [[invisibility cloak]]",
+"ru": "подсказка: i…  /ˌɪnvɪzəˈbɪləti kləʊk/"
+},
+{
+"id": "invisible",
+"t": "невидимый — [[invisible]]",
+"ru": "подсказка: i…  /ɪnˈvɪzəbl/"
+},
+{
+"id": "cloak",
+"t": "плащ, накидка — [[cloak]]",
+"ru": "подсказка: c…  /kləʊk/"
+},
+{
+"id": "prove",
+"t": "доказывать; оказаться (каким-то) — [[prove]]",
+"ru": "подсказка: p…  /pruːv/"
+},
+{
+"id": "useful",
+"t": "полезный — [[useful]]",
+"ru": "подсказка: u…  /ˈjuːsfl/"
+},
+{
+"id": "adventure",
+"t": "приключение — [[adventure]]",
+"ru": "подсказка: a…  /ədˈventʃə/"
+},
+{
+"id": "how-far",
+"t": "как далеко — [[how far]]",
+"ru": "подсказка: h…  /haʊ ˈfɑː/"
+},
+{
+"id": "develop",
+"t": "развивать, разрабатывать — [[develop]]",
+"ru": "подсказка: d…  /dɪˈveləp/"
+},
+{
+"id": "outrageous",
+"t": "безумный, невероятный; возмутительный — [[outrageous]]",
+"ru": "подсказка: o…  /aʊtˈreɪdʒəs/"
+},
+{
+"id": "idea",
+"t": "идея — [[idea]]",
+"ru": "подсказка: i…  /aɪˈdɪə/"
+},
+{
+"id": "real",
+"t": "настоящий, реальный — [[real]]",
+"ru": "подсказка: r…  /rɪəl/"
+},
+{
+"id": "prototype",
+"t": "прототип, опытный образец — [[prototype]]",
+"ru": "подсказка: p…  /ˈprəʊtətaɪp/"
+},
+{
+"id": "quite",
+"t": "довольно, вполне — [[quite]]",
+"ru": "подсказка: q…  /kwaɪt/"
+},
+{
+"id": "actually",
+"t": "на самом деле, вообще-то — [[actually]]",
+"ru": "подсказка: a…  /ˈæktʃuəli/"
+},
+{
+"id": "university",
+"t": "университет — [[university]]",
+"ru": "подсказка: u…  /ˌjuːnɪˈvɜːsəti/"
+},
+{
+"id": "demonstrate",
+"t": "показывать, демонстрировать — [[demonstrate]]",
+"ru": "подсказка: d…  /ˈdemənstreɪt/"
+},
+{
+"id": "switch",
+"t": "выключатель; переключать — [[switch]]",
+"ru": "подсказка: s…  /swɪtʃ/"
+},
+{
+"id": "at-the-flick-of-a-switch",
+"t": "одним щелчком, моментально — [[at the flick of a switch]]",
+"ru": "подсказка: a…  /ət ðə flɪk əv ə swɪtʃ/"
+},
+{
+"id": "same",
+"t": "одинаковый, тот же самый — [[same]]",
+"ru": "подсказка: s…  /seɪm/"
+},
+{
+"id": "principle",
+"t": "принцип — [[principle]]",
+"ru": "подсказка: p…  /ˈprɪnsəpl/"
+},
+{
+"id": "desert",
+"t": "пустыня — [[desert]]",
+"ru": "подсказка: d…  /ˈdezət/"
+},
+{
+"id": "mirage",
+"t": "мираж — [[mirage]]",
+"ru": "подсказка: m…  /ˈmɪrɑːʒ/"
+},
+{
+"id": "heat",
+"t": "жара, тепло; нагревать — [[heat]]",
+"ru": "подсказка: h…  /hiːt/"
+},
+{
+"id": "bend",
+"t": "сгибать, изгибать — [[bend]]",
+"ru": "подсказка: b…  /bend/"
+},
+{
+"id": "light",
+"t": "свет; лёгкий — [[light]]",
+"ru": "подсказка: l…  /laɪt/"
+},
+{
+"id": "shape",
+"t": "форма — [[shape]]",
+"ru": "подсказка: s…  /ʃeɪp/"
+},
+{
+"id": "out-of-shape",
+"t": "деформированный; не в форме — [[out of shape]]",
+"ru": "подсказка: o…  /aʊt əv ˈʃeɪp/"
+},
+{
+"id": "create",
+"t": "создавать — [[create]]",
+"ru": "подсказка: c…  /kriˈeɪt/"
+},
+{
+"id": "illusion",
+"t": "иллюзия — [[illusion]]",
+"ru": "подсказка: i…  /ɪˈluːʒn/"
+},
+{
+"id": "trick",
+"t": "трюк, фокус; обман — [[trick]]",
+"ru": "подсказка: t…  /trɪk/"
+},
+{
+"id": "fool",
+"t": "обманывать, дурачить — [[fool]]",
+"ru": "подсказка: f…  /fuːl/"
+},
+{
+"id": "thirsty",
+"t": "испытывающий жажду (I'm thirsty — хочу пить) — [[thirsty]]",
+"ru": "подсказка: t…  /ˈθɜːsti/"
+},
+{
+"id": "traveller",
+"t": "путешественник — [[traveller]]",
+"ru": "подсказка: t…  /ˈtrævələ/"
+},
+{
+"id": "temperature",
+"t": "температура — [[temperature]]",
+"ru": "подсказка: t…  /ˈtemprətʃə/"
+},
+{
+"id": "much",
+"t": "гораздо (much higher — гораздо выше) — [[much]]",
+"ru": "подсказка: m…  /mʌtʃ/"
+},
+{
+"id": "tube",
+"t": "трубка, тюбик; метро в Лондоне — [[tube]]",
+"ru": "подсказка: t…  /tjuːb/"
+},
+{
+"id": "look-like",
+"t": "выглядеть как, быть похожим — [[look like]]",
+"ru": "подсказка: l…  /lʊk laɪk/"
+},
+{
+"id": "strand",
+"t": "нить, прядь — [[strand]]",
+"ru": "подсказка: s…  /strænd/"
+},
+{
+"id": "thread",
+"t": "нитка — [[thread]]",
+"ru": "подсказка: t…  /θred/"
+},
+{
+"id": "enough",
+"t": "достаточно — [[enough]]",
+"ru": "подсказка: e…  /ɪˈnʌf/"
+},
+{
+"id": "hide",
+"t": "прятать(ся) — [[hide]]",
+"ru": "подсказка: h…  /haɪd/"
+},
+{
+"id": "view",
+"t": "вид; поле зрения — [[view]]",
+"ru": "подсказка: v…  /vjuː/"
+},
+{
+"id": "mean",
+"t": "значить, означать — [[mean]]",
+"ru": "подсказка: m…  /miːn/"
+},
+{
+"id": "fully",
+"t": "полностью — [[fully]]",
+"ru": "подсказка: f…  /ˈfʊli/"
+},
+{
+"id": "in-the-near-future",
+"t": "в ближайшем будущем — [[in the near future]]",
+"ru": "подсказка: i…  /ɪn ðə nɪə ˈfjuːtʃə/"
+},
+{
+"id": "perhaps",
+"t": "возможно, может быть — [[perhaps]]",
+"ru": "подсказка: p…  /pəˈhæps/"
+},
+{
+"id": "problem",
+"t": "проблема — [[problem]]",
+"ru": "подсказка: p…  /ˈprɒbləm/"
+},
+{
+"id": "so-far",
+"t": "пока что, до сих пор — [[so far]]",
+"ru": "подсказка: s…  /səʊ ˈfɑː/"
+},
+{
+"id": "only",
+"t": "только; единственный — [[only]]",
+"ru": "подсказка: o…  /ˈəʊnli/"
+},
+{
+"id": "underwater",
+"t": "под водой — [[underwater]]",
+"ru": "подсказка: u…  /ˌʌndəˈwɔːtə/"
+}
+]
+},
+{
+"type": "gaps",
+"title": "Вставь слово в предложение",
+"short": "Предложения",
+"instr": "Нажми слово, которое подходит. Перевод предложения — под ним.",
+"items": [
+{
+"id": "invisibility-cloak",
+"t": "Harry Potter has an {{*invisibility cloak|switch|thread}}.",
+"ru": "У Гарри Поттера есть плащ-невидимка."
+},
+{
+"id": "invisible",
+"t": "Air is {{*invisible|tube|idea}}.",
+"ru": "Воздух невидимый."
+},
+{
+"id": "cloak",
+"t": "The wizard wears a long black {{*cloak|light|enough}}.",
+"ru": "Волшебник носит длинный чёрный плащ."
+},
+{
+"id": "prove",
+"t": "Can you {{*prove|thirsty|view}} it?",
+"ru": "Ты можешь это доказать?"
+},
+{
+"id": "useful",
+"t": "A dictionary is very {{*useful|thread|adventure}}.",
+"ru": "Словарь очень полезен."
+},
+{
+"id": "adventure",
+"t": "We had a great {{*adventure|enough|invisibility cloak}} in the forest.",
+"ru": "У нас было классное приключение в лесу."
+},
+{
+"id": "how-far",
+"t": "{{*how far|thirsty|at the flick of a switch}} is your school from your house?",
+"ru": "Как далеко твоя школа от дома?"
+},
+{
+"id": "develop",
+"t": "Scientists {{*develop|look like|demonstrate}} new medicines.",
+"ru": "Учёные разрабатывают новые лекарства."
+},
+{
+"id": "outrageous",
+"t": "That's an {{*outrageous|actually|problem}} idea!",
+"ru": "Это безумная идея!"
+},
+{
+"id": "idea",
+"t": "That's a great {{*idea|thirsty|tube}}!",
+"ru": "Отличная идея!"
+},
+{
+"id": "real",
+"t": "Is this a {{*real|look like|thirsty}} diamond?",
+"ru": "Это настоящий бриллиант?"
+},
+{
+"id": "prototype",
+"t": "They built a {{*prototype|out of shape|view}} of the new car.",
+"ru": "Они сделали прототип новой машины."
+},
+{
+"id": "quite",
+"t": "The film was {{*quite|idea|demonstrate}} good.",
+"ru": "Фильм был довольно хороший."
+},
+{
+"id": "actually",
+"t": "{{*actually|view|idea}}, I don't like pizza.",
+"ru": "Вообще-то я не люблю пиццу."
+},
+{
+"id": "university",
+"t": "My brother studies at {{*university|much|shape}}.",
+"ru": "Мой брат учится в университете."
+},
+{
+"id": "demonstrate",
+"t": "The teacher will {{*demonstrate|only|invisibility cloak}} the experiment.",
+"ru": "Учитель покажет опыт."
+},
+{
+"id": "switch",
+"t": "Where is the light {{*switch|fully|useful}}?",
+"ru": "Где выключатель?"
+},
+{
+"id": "at-the-flick-of-a-switch",
+"t": "The lights come on {{*at the flick of a switch|real|underwater}}.",
+"ru": "Свет включается одним щелчком."
+},
+{
+"id": "same",
+"t": "We are in the {{*same|thread|cloak}} class.",
+"ru": "Мы в одном классе."
+},
+{
+"id": "principle",
+"t": "This machine works on a simple {{*principle|desert|invisible}}.",
+"ru": "Эта машина работает по простому принципу."
+},
+{
+"id": "desert",
+"t": "It is very hot in the {{*desert|at the flick of a switch|thirsty}}.",
+"ru": "В пустыне очень жарко."
+},
+{
+"id": "mirage",
+"t": "The water was only a {{*mirage|enough|so far}}.",
+"ru": "Вода оказалась всего лишь миражом."
+},
+{
+"id": "heat",
+"t": "I can't sleep in this {{*heat|shape|problem}}.",
+"ru": "Я не могу спать в такую жару."
+},
+{
+"id": "bend",
+"t": "{{*bend|illusion|out of shape}} your knees and jump!",
+"ru": "Согни колени и прыгай!"
+},
+{
+"id": "light",
+"t": "Please turn on the {{*light|so far|strand}}.",
+"ru": "Включи, пожалуйста, свет."
+},
+{
+"id": "shape",
+"t": "A ball has a round {{*shape|trick|outrageous}}.",
+"ru": "У мяча круглая форма."
+},
+{
+"id": "out-of-shape",
+"t": "I don't do sport, so I'm {{*out of shape|bend|how far}}.",
+"ru": "Я не занимаюсь спортом, поэтому я не в форме."
+},
+{
+"id": "create",
+"t": "Artists {{*create|cloak|outrageous}} beautiful pictures.",
+"ru": "Художники создают красивые картины."
+},
+{
+"id": "illusion",
+"t": "It's not real, it's an {{*illusion|traveller|actually}}.",
+"ru": "Это не по-настоящему, это иллюзия."
+},
+{
+"id": "trick",
+"t": "Can you show me a card {{*trick|switch|in the near future}}?",
+"ru": "Покажешь мне карточный фокус?"
+},
+{
+"id": "fool",
+"t": "Don't try to {{*fool|create|view}} me!",
+"ru": "Не пытайся меня обмануть!"
+},
+{
+"id": "thirsty",
+"t": "I'm {{*thirsty|principle|out of shape}}. Can I have some water?",
+"ru": "Я хочу пить. Можно воды?"
+},
+{
+"id": "traveller",
+"t": "The {{*traveller|temperature|light}} walked for many days.",
+"ru": "Путешественник шёл много дней."
+},
+{
+"id": "temperature",
+"t": "What is the {{*temperature|strand|heat}} today?",
+"ru": "Какая сегодня температура?"
+},
+{
+"id": "much",
+"t": "This book is {{*much|tube|thread}} better than that one.",
+"ru": "Эта книга гораздо лучше той."
+},
+{
+"id": "tube",
+"t": "I go to work by {{*tube|out of shape|thread}} in London.",
+"ru": "В Лондоне я езжу на работу на метро."
+},
+{
+"id": "look-like",
+"t": "You {{*look like|university|mirage}} your mum.",
+"ru": "Ты похожа на маму."
+},
+{
+"id": "strand",
+"t": "There is a {{*strand|in the near future|invisible}} of hair on your jacket.",
+"ru": "У тебя на куртке волосок."
+},
+{
+"id": "thread",
+"t": "I need a needle and {{*thread|at the flick of a switch|enough}}.",
+"ru": "Мне нужны иголка и нитка."
+},
+{
+"id": "enough",
+"t": "I don't have {{*enough|fully|perhaps}} money.",
+"ru": "У меня недостаточно денег."
+},
+{
+"id": "hide",
+"t": "Where did you {{*hide|real|perhaps}} the keys?",
+"ru": "Куда ты спрятала ключи?"
+},
+{
+"id": "view",
+"t": "There is a beautiful {{*view|desert|much}} from my window.",
+"ru": "Из моего окна красивый вид."
+},
+{
+"id": "mean",
+"t": "What does this word {{*mean|look like|how far}}?",
+"ru": "Что значит это слово?"
+},
+{
+"id": "fully",
+"t": "My phone is {{*fully|problem|view}} charged.",
+"ru": "Мой телефон полностью заряжен."
+},
+{
+"id": "in-the-near-future",
+"t": "I will buy a new phone {{*in the near future|actually|hide}}.",
+"ru": "Я куплю новый телефон в ближайшем будущем."
+},
+{
+"id": "perhaps",
+"t": "{{*perhaps|look like|at the flick of a switch}} it will rain tomorrow.",
+"ru": "Может быть, завтра будет дождь."
+},
+{
+"id": "problem",
+"t": "What's the {{*problem|same|develop}}?",
+"ru": "В чём проблема?"
+},
+{
+"id": "so-far",
+"t": "{{*so far|useful|fool}} I have learnt 50 words.",
+"ru": "Пока что я выучила 50 слов."
+},
+{
+"id": "only",
+"t": "I have {{*only|hide|fool}} one brother.",
+"ru": "У меня только один брат."
+},
+{
+"id": "underwater",
+"t": "Fish live {{*underwater|adventure|heat}}.",
+"ru": "Рыбы живут под водой."
+}
+]
+}
+];
+
+/* ===== Drill engine (shared). Expects META, P, DRILLS defined before this script. ===== */
+const byId = Object.fromEntries(P.map(p => [p.id, p]));
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const shuffle = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const norm = s => (s || "").toLowerCase().replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, " ").trim().replace(/[.!?,;:]+$/, "");
+
+let M = {};
+try { M = JSON.parse(localStorage.getItem(META.ls) || "{}") || {}; } catch (e) { M = {}; }
+const save = () => { try { localStorage.setItem(META.ls, JSON.stringify(M)); } catch (e) {} };
+const COUNT = {};
+let COUNTING = true;
+const reg = id => { if (COUNTING && id && byId[id]) COUNT[id] = (COUNT[id] || 0) + 1; };
+const goal = id => Math.max(1, Math.min(5, COUNT[id] || 5));
+function hit(id, ok) {
+  if (!id || !byId[id]) return;
+  const r = M[id] || (M[id] = { c: 0, m: 0 });
+  if (ok) r.c++; else r.m++;
+  save(); renderBoard();
+}
+function renderBoard() {
+  const b = document.getElementById("board");
+  b.innerHTML = "";
+  let learned = 0;
+  P.forEach(p => {
+    const r = M[p.id] || { c: 0, m: 0 };
+    const g = goal(p.id);
+    const n = Math.min(g, r.c);
+    if (n >= g) learned++;
+    const chip = el("div", "chip" + (n >= g ? " master" : r.m > r.c ? " weak" : ""));
+    chip.append(el("span", "ph", p.phrase), el("span", "ru", p.ru));
+    const dots = el("span", "dots");
+    dots.setAttribute("aria-label", `${n} of ${g}`);
+    for (let i = 0; i < g; i++) dots.append(el("i", i < n ? "on" : ""));
+    chip.append(dots);
+    b.append(chip);
+  });
+  document.getElementById("mastered").textContent = learned;
+  document.getElementById("ptotal").textContent = P.length;
+  document.getElementById("fill").style.width = `${(learned / P.length) * 100}%`;
+}
+
+function card(num, def) {
+  const sec = el("section");
+  sec.id = `d${num}`;
+  const ex = el("article", "ex");
+  const head = el("div", "ex-head");
+  const h3 = el("h3");
+  h3.append(el("span", "num", `Упр. ${num}`), def.title);
+  const score = el("span", "score");
+  head.append(h3, score);
+  ex.append(head, el("p", "instr", def.instr));
+  if (def.bank) {
+    const bank = el("div", "bank");
+    def.bank.forEach(w => bank.append(el("span", null, w)));
+    ex.append(bank);
+  }
+  const body = el("div");
+  const foot = el("div", "foot");
+  ex.append(body, foot);
+  if (def.note) ex.append(el("p", "note", def.note));
+  sec.append(ex);
+  document.getElementById("main").append(sec);
+  const a = el("a", null, `${num} · ${def.short}`);
+  a.href = `#d${num}`;
+  document.getElementById("nav").append(a);
+  return { body, foot, score, total: 0, ok: 0, def };
+}
+const setScore = d => { d.score.textContent = `${d.ok} / ${d.total}`; d.score.classList.toggle("done", d.total > 0 && d.ok === d.total); };
+function resetBtn(d, build) {
+  const r = el("button", "btn", "Начать заново");
+  r.type = "button";
+  r.addEventListener("click", () => { d.body.innerHTML = ""; d.foot.innerHTML = ""; build(); });
+  d.foot.append(r);
+}
+function splitId(spec, fallback) {
+  const i = spec.lastIndexOf("#");
+  return i > -1 ? [spec.slice(0, i), spec.slice(i + 1)] : [spec, fallback];
+}
+function options(list, correctSet, id, d, shuf) {
+  reg(id);
+  const wrap = el("span", "choice");
+  let done = false;
+  (shuf ? shuffle(list) : list).forEach(o => {
+    const b = el("button", "opt", o);
+    b.type = "button";
+    b.addEventListener("click", () => {
+      if (done || b.disabled) return;
+      if (correctSet.includes(o)) {
+        done = true;
+        b.classList.add("ok");
+        wrap.querySelectorAll(".opt").forEach(x => { if (x !== b) { x.classList.add("dim"); x.disabled = true; } });
+        d.ok++; setScore(d); hit(id, true);
+      } else {
+        b.classList.add("bad", "shake");
+        b.disabled = true;
+        hit(id, false);
+      }
+    });
+    wrap.append(b);
+  });
+  return wrap;
+}
+
+/* Inline text with {{*right|wrong#id}} choices, [[ans/alt#id]] typed gaps, ^CUE^ word-formation cues */
+const TOK = /\{\{(.+?)\}\}|\[\[(.+?)\]\]|\^(.+?)\^/g;
+function inline(text, id, d, gaps, shuf) {
+  const frag = document.createDocumentFragment();
+  let last = 0;
+  text.replace(TOK, (m, c, t, q, off) => {
+    frag.append(text.slice(last, off));
+    if (c) {
+      const [spec, gid] = splitId(c, id);
+      const raw = spec.split("|");
+      const right = raw.filter(o => o.startsWith("*")).map(o => o.slice(1));
+      frag.append(options(raw.map(o => o.replace(/^\*/, "")), right, gid, d, shuf));
+      d.total++;
+    } else if (t) {
+      const [spec, gid] = splitId(t, id);
+      const answers = spec.split("/");
+      const inp = el("input", "gap");
+      inp.type = "text"; inp.autocomplete = "off"; inp.spellcheck = false;
+      inp.id = `g${d.num}-${gaps.length}`;
+      inp.setAttribute("autocapitalize", "off"); inp.setAttribute("aria-label", "gap");
+      inp.style.width = `${Math.max(6, Math.max(...answers.map(a => a.length)) + 2)}ch`;
+      reg(gid);
+      const g = { inp, answers: answers.map(norm), show: answers[0], id: gid, ok: false };
+      gaps.push(g);
+      inp.addEventListener("input", () => inp.classList.remove("ok", "bad", "shown"));
+      inp.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); d.check(); } });
+      frag.append(inp);
+      d.total++;
+    } else {
+      frag.append(el("span", "cue", q));
+    }
+    last = off + m.length;
+    return m;
+  });
+  frag.append(text.slice(last));
+  return frag;
+}
+
+const RENDER = {
+  /* sentences with inline choices and/or typed gaps */
+  gaps(d) {
+    const def = d.def;
+    const gaps = [];
+    d.check = () => {
+      gaps.forEach(g => {
+        if (g.ok) return;
+        const v = norm(g.inp.value);
+        if (!v) return;
+        g.inp.classList.remove("ok", "bad", "shown");
+        if (g.answers.includes(v)) { g.ok = true; g.inp.classList.add("ok"); g.inp.readOnly = true; d.ok++; hit(g.id, true); }
+        else { g.inp.classList.add("bad"); hit(g.id, false); }
+      });
+      setScore(d);
+    };
+    const items = def.keepOrder ? def.items : shuffle(def.items);
+    const shuf = def.shuffleOptions !== false;
+    if (def.layout === "text") {
+      items.forEach(it => { const p = el("p", "text"); p.append(inline(it.t, it.id, d, gaps, shuf)); d.body.append(p); });
+    } else {
+      const ol = el("ol", "items");
+      items.forEach(it => { const li = el("li"); li.append(inline(it.t, it.id, d, gaps, shuf)); if (it.ru) li.append(el("div", "ru-hint", it.ru)); ol.append(li); });
+      d.body.append(ol);
+    }
+    if (gaps.length) {
+      const c = el("button", "btn primary", "Проверить"); c.type = "button"; c.addEventListener("click", d.check);
+      const s = el("button", "btn", "Показать ответы"); s.type = "button";
+      s.addEventListener("click", () => gaps.forEach(g => { if (!g.ok) { g.inp.value = g.show; g.inp.classList.remove("bad"); g.inp.classList.add("shown"); } }));
+      d.foot.append(c, s);
+    }
+  },
+  /* question + option buttons; first option in o is the correct one */
+  mcq(d) {
+    const ol = el("ol", "items");
+    shuffle(d.def.items).forEach(it => {
+      const li = el("li");
+      li.append(el("p", "q", it.q));
+      const box = el("div", "mcq");
+      box.append(options([...it.o], [it.o[0]], it.id, d, true));
+      d.total++;
+      li.append(box);
+      ol.append(li);
+    });
+    d.body.append(ol);
+  },
+  /* meaning -> phrase, built from P */
+  meaning(d) {
+    const ol = el("ol", "items");
+    const pool = d.def.ids ? P.filter(p => d.def.ids.includes(p.id)) : P;
+    shuffle(pool).forEach(p => {
+      const li = el("li");
+      li.append(el("p", "q", p.en));
+      const lab = x => x.opt || x.phrase;
+      const others = [...new Set(shuffle(pool.filter(x => x.id !== p.id)).map(lab))].filter(t => t !== lab(p)).slice(0, 3);
+      const box = el("div", "mcq");
+      box.append(options([lab(p), ...others], [lab(p)], p.id, d, true));
+      d.total++;
+      li.append(box);
+      ol.append(li);
+    });
+    d.body.append(ol);
+  },
+  /* right or wrong */
+  tf(d) {
+    const ol = el("ol", "items");
+    shuffle(d.def.items).forEach(it => {
+      d.total++; reg(it.id);
+      const li = el("li");
+      li.append(el("p", "tf-line", it.t));
+      const btns = el("div", "tf-btns");
+      const fb = el("p", "fix"); fb.hidden = true;
+      let done = false;
+      [["Right", true], ["Wrong", false]].forEach(([label, val]) => {
+        const b = el("button", "opt", label);
+        b.type = "button";
+        b.addEventListener("click", () => {
+          if (done) return;
+          done = true;
+          const correct = val === it.ok;
+          b.classList.add(correct ? "ok" : "bad");
+          btns.querySelectorAll(".opt").forEach(x => { if (x !== b) { x.classList.add("dim"); x.disabled = true; } });
+          fb.hidden = false;
+          fb.className = "fix " + (correct ? "ok" : "bad");
+          fb.innerHTML = "";
+          if (it.ok) fb.append(correct ? "Yes, that's correct." : "It was correct.");
+          else fb.append(correct ? "Yes! Correct version: " : "It was wrong. Correct version: ", el("b", null, it.fix));
+          if (correct) { d.ok++; setScore(d); }
+          hit(it.id, correct);
+        });
+        btns.append(b);
+      });
+      li.append(btns, fb);
+      ol.append(li);
+    });
+    d.body.append(ol);
+  },
+  /* word order */
+  order(d) {
+    const ol = el("ol", "items");
+    shuffle(d.def.items).forEach(it => {
+      d.total++; reg(it.id);
+      const li = el("li");
+      if (it.q) li.append(el("p", "q", it.q));
+      const wrap = el("div", "uns");
+      const target = it.s.split(" ");
+      const line = el("div", "answer-line");
+      line.setAttribute("aria-label", "Your sentence");
+      const pool = el("div", "tiles");
+      const fb = el("p", "fix"); fb.hidden = true;
+      let solved = false;
+      const mk = w => {
+        const t = el("button", "tile", w);
+        t.type = "button";
+        t.addEventListener("click", () => {
+          if (solved) return;
+          (t.parentElement === pool ? line : pool).append(t);
+          line.classList.remove("bad"); fb.hidden = true;
+        });
+        return t;
+      };
+      let order = shuffle(target);
+      if (order.join(" ") === it.s && target.length > 1) order = [...order.slice(1), order[0]];
+      order.forEach(w => pool.append(mk(w)));
+      const controls = el("div", "line");
+      const c = el("button", "btn small primary", "Проверить"); c.type = "button";
+      const sh = el("button", "btn small", "Показать ответ"); sh.type = "button";
+      c.addEventListener("click", () => {
+        if (solved) return;
+        const built = [...line.children].map(x => x.textContent).join(" ");
+        if (!built) return;
+        fb.hidden = false;
+        const alts = [it.s, ...(it.alt || [])];
+        if (alts.includes(built)) {
+          solved = true; line.classList.add("ok"); fb.className = "fix ok"; fb.textContent = "Верно!";
+          d.ok++; setScore(d); hit(it.id, true);
+        } else if (pool.children.length) {
+          fb.className = "fix bad"; fb.textContent = "Используй все слова.";
+        } else {
+          line.classList.add("bad"); fb.className = "fix bad"; fb.textContent = "Не совсем. Попробуй ещё раз.";
+          hit(it.id, false);
+        }
+      });
+      sh.addEventListener("click", () => { fb.hidden = false; fb.className = "fix"; fb.innerHTML = ""; fb.append("Ответ: ", el("b", null, it.s)); });
+      controls.append(c, sh);
+      wrap.append(line, pool, controls, fb);
+      li.append(wrap);
+      ol.append(li);
+    });
+    d.body.append(ol);
+  },
+  /* translation; key = regex the answer must contain */
+  translate(d) {
+    const ol = el("ol", "items tr");
+    shuffle(d.def.items).forEach((it, i) => {
+      d.total++; reg(it.id);
+      const li = el("li");
+      li.append(el("p", "ru-line", it.ru));
+      const ta = el("textarea");
+      ta.id = `t${d.num}-${i}`; ta.rows = 1; ta.placeholder = "Напиши по-английски…"; ta.setAttribute("aria-label", "Your translation");
+      const line = el("div", "line");
+      const c = el("button", "btn small primary", "Проверить"); c.type = "button";
+      const sh = el("button", "btn small", "Показать ответ"); sh.type = "button";
+      const model = el("p", "model"); model.hidden = true;
+      let solved = false;
+      const re = new RegExp(`(^|[^a-z'])(${it.key})($|[^a-z'])`, "i");
+      const check = () => {
+        if (solved || !ta.value.trim()) return;
+        const v = norm(ta.value);
+        ta.classList.remove("ok", "bad");
+        model.hidden = false; model.innerHTML = "";
+        if (re.test(v)) {
+          solved = true; ta.classList.add("ok"); ta.readOnly = true;
+          model.append("Верно! Ответ: ", el("b", null, it.en));
+          d.ok++; setScore(d); hit(it.id, true);
+        } else {
+          ta.classList.add("bad");
+          model.append("Use ", el("b", null, it.hint || (byId[it.id] ? byId[it.id].phrase : "the target phrase")), ". Try again.");
+          hit(it.id, false);
+        }
+      };
+      c.addEventListener("click", check);
+      ta.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); check(); } });
+      sh.addEventListener("click", () => { model.hidden = false; model.innerHTML = ""; model.append("Ответ: ", el("b", null, it.en)); });
+      line.append(c, sh);
+      li.append(ta, line, model);
+      ol.append(li);
+    });
+    d.body.append(ol);
+  }
+};
+
+
+
+/* pick: word -> translation, translation -> word, or listen -> word; built from P */
+RENDER.pick = function (d) {
+  const ol = el("ol", "items");
+  const mode = d.def.mode;
+  shuffle(P).forEach(p => {
+    const li = el("li");
+    const q = el("p", "q");
+    if (mode === "enru") { q.append(el("b", null, p.phrase), " "); const ip = el("span", "ipa-s", p.ipa); q.append(ip); }
+    if (mode === "ruen") q.append(el("b", null, p.ru));
+    if (mode === "enru" || mode === "listen") {
+      const s = el("button", "speak inl", "🔊"); s.type = "button"; s.setAttribute("aria-label", "listen");
+      s.addEventListener("click", () => speak(sayText(p)));
+      if (mode === "listen") { q.append(s, " "); q.append(el("span", "ipa-s", "послушай и выбери слово")); } else q.append(" ", s);
+    }
+    li.append(q);
+    const lab = x => mode === "enru" ? x.ru : x.phrase;
+    const others = [...new Set(shuffle(P.filter(x => x.id !== p.id)).map(lab))].filter(t => t !== lab(p)).slice(0, 3);
+    const box = el("div", "mcq");
+    const w = options([lab(p), ...others], [lab(p)], p.id, d, true);
+    if (mode !== "enru") w.addEventListener("click", e => { const b = e.target.closest(".opt"); if (b && b.classList.contains("ok")) speak(sayText(p)); });
+    box.append(w);
+    d.total++;
+    li.append(box);
+    ol.append(li);
+  });
+  d.body.append(ol);
+};
+
+/* ===== Flashcards (auto Drill 1) ===== */
+const sayText = p => (p.say || p.phrase)
+  .replace(/\([^)]*\)/g, " ").replace(/→/g, ", ").replace(/…|\.\.\./g, " ")
+  .replace(/\bsb\b/g, "someone").replace(/\bsth\b/g, "something")
+  .replace(/\s\/\s/g, " or ").replace(/^-/, "").replace(/\s+/g, " ").trim();
+let VOICE = null;
+function pickVoice() {
+  try {
+    const vs = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang));
+    VOICE = vs.find(v => /en[-_]GB/i.test(v.lang) && /google|natural|online|serena|daniel|kate/i.test(v.name))
+      || vs.find(v => /en[-_]GB/i.test(v.lang)) || vs.find(v => /en[-_]US/i.test(v.lang)) || vs[0] || null;
+  } catch (e) { VOICE = null; }
+}
+try { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } catch (e) {}
+function speak(text) {
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    if (VOICE) u.voice = VOICE;
+    u.lang = VOICE ? VOICE.lang : "en-GB";
+    u.rate = 0.9;
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
+const HAS_TTS = typeof window !== "undefined" && "speechSynthesis" in window;
+
+RENDER.cards = function (d) {
+  let deck = P.map(p => p.id), pos = 0, flipped = false, ruFirst = false, known = 0, auto = false;
+  d.total = deck.length;
+  const box = el("div", "fc");
+  const tools = el("div", "fc-tools");
+  const mk = (txt, title) => { const b = el("button", "btn ghost", txt); b.type = "button"; if (title) b.title = title; return b; };
+  const bShuf = mk("Перемешать"), bDir = mk("Сначала русский"), bAuto = mk("Автозвук: выкл");
+  tools.append(bShuf, bDir);
+  if (HAS_TTS) tools.append(bAuto);
+  const flip = el("div", "flip"); flip.tabIndex = 0; flip.setAttribute("role", "button");
+  const inner = el("div", "flip-in");
+  const front = el("div", "face front"), back = el("div", "face back");
+  inner.append(front, back); flip.append(inner);
+  const nav = el("div", "fc-nav");
+  const bPrev = mk("‹"), bNext = mk("›"), count = el("span", "fc-count");
+  bPrev.setAttribute("aria-label", "previous"); bNext.setAttribute("aria-label", "next");
+  nav.append(bPrev, count, bNext);
+  const rate = el("div", "fc-rate");
+  const bAgain = el("button", "btn again", "Ещё раз"), bKnow = el("button", "btn know", "Знаю ✓");
+  bAgain.type = bKnow.type = "button";
+  rate.append(bAgain, bKnow);
+  const done = el("div", "fc-done");
+  box.append(tools, flip, nav, rate, done);
+  d.body.append(box);
+
+  const face = (node, p, en) => {
+    node.innerHTML = "";
+    if (en) {
+      node.append(el("div", "fc-word", p.phrase));
+      if (p.ipa) node.append(el("div", "fc-ipa", p.ipa));
+      if (HAS_TTS) {
+        const s = el("button", "speak", "🔊"); s.type = "button"; s.setAttribute("aria-label", "listen");
+        s.addEventListener("click", e => { e.stopPropagation(); speak(sayText(p)); });
+        node.append(s);
+      }
+    } else {
+      node.append(el("div", "fc-ru", p.ru));
+      if (p.en) node.append(el("div", "fc-def", p.en));
+    }
+    node.append(el("div", "fc-hint", "нажми, чтобы перевернуть"));
+  };
+  function show() {
+    done.innerHTML = "";
+    const left = deck.length > 0;
+    [flip, nav, rate].forEach(x => x.hidden = !left);
+    if (!left) {
+      done.append(el("p", null, `Все ${P.length} карточек пройдены! Теперь упражнение 2.`));
+      const r = mk("Пройти карточки ещё раз"); r.addEventListener("click", () => { deck = P.map(p => p.id); known = 0; d.ok = 0; setScore(d); pos = 0; show(); });
+      done.append(r);
+      return;
+    }
+    pos = (pos + deck.length) % deck.length;
+    const p = byId[deck[pos]];
+    flipped = false; flip.classList.remove("on");
+    face(front, p, !ruFirst); face(back, p, ruFirst);
+    count.textContent = `${pos + 1} / ${deck.length}`;
+    if (auto && !ruFirst) speak(sayText(p));
+  }
+  function turn() {
+    flipped = !flipped; flip.classList.toggle("on", flipped);
+    if (auto && ruFirst && flipped) speak(sayText(byId[deck[pos]]));
+  }
+  flip.addEventListener("click", turn);
+  flip.addEventListener("keydown", e => {
+    if (e.key === " " || e.key === "Enter") { e.preventDefault(); turn(); }
+    else if (e.key === "ArrowRight") { pos++; show(); }
+    else if (e.key === "ArrowLeft") { pos--; show(); }
+  });
+  bPrev.addEventListener("click", () => { pos--; show(); });
+  bNext.addEventListener("click", () => { pos++; show(); });
+  bShuf.addEventListener("click", () => { deck = shuffle(deck); pos = 0; show(); });
+  bDir.addEventListener("click", () => { ruFirst = !ruFirst; bDir.textContent = ruFirst ? "Сначала английский" : "Сначала русский"; show(); });
+  bAuto.addEventListener("click", () => { auto = !auto; bAuto.textContent = `Автозвук: ${auto ? "вкл" : "выкл"}`; if (auto) show(); });
+  bKnow.addEventListener("click", () => { deck.splice(pos, 1); known++; d.ok = known; setScore(d); show(); });
+  bAgain.addEventListener("click", () => { const id = deck.splice(pos, 1)[0]; deck.push(id); if (pos >= deck.length - 1 && deck.length > 1) pos = deck.length - 1; show(); });
+  show();
+};
+
+function startDrill(num, def) {
+  const d = card(num, def);
+  d.num = num;
+  const build = () => {
+    d.ok = 0; d.total = 0;
+    RENDER[def.type](d);
+    setScore(d);
+    resetBtn(d, build);
+  };
+  build();
+}
+
+document.getElementById("reset-all").addEventListener("click", e => {
+  const b = e.currentTarget;
+  if (b.dataset.armed) { M = {}; save(); renderBoard(); b.textContent = "Сбросить прогресс"; delete b.dataset.armed; }
+  else { b.dataset.armed = "1"; b.textContent = "Нажми ещё раз"; setTimeout(() => { if (b.dataset.armed) { delete b.dataset.armed; b.textContent = "Сбросить прогресс"; } }, 3000); }
+});
+const boardLink = el("a", null, "Слова"); boardLink.href = "#board-sec";
+document.getElementById("nav").append(boardLink);
+const CARDS = { type: "cards", title: "Карточки", short: "Карточки",
+  instr: "Посмотри на слово, послушай 🔊 и скажи перевод. Нажми на карточку — она перевернётся. Потом нажми «Знаю» или «Ещё раз»: карточки «Ещё раз» вернутся в конце." };
+(META.cards === false ? DRILLS : [CARDS, ...DRILLS]).forEach((def, i) => startDrill(i + 1, def));
+COUNTING = false;
+renderBoard();
+
+</script>
+
+</body></html>
